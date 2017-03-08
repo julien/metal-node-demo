@@ -141,7 +141,24 @@ var noop = function noop() {};
 
 var patch = function patch(node, description, data) {
   var fn = typeof description === 'function' ? description : noop;
+
+  // if (!node.tagName) {
+  //   return;
+  // }
+
+  // const tag = node.tagName.toLowerCase();
+  // const attrs = [];
+  // if (node.attributes) {
+  //   for (let i = 0, l = node.attributes.length; i < l; i++) {
+  //     attrs.push(node.attributes[i].name);
+  //     attrs.push(node.attributes[i].value);
+  //   }
+  // }
+
+  // elementOpen(tag, null, attrs);
   description(data);
+  // elementClose(tag);
+
   var output = getOutput();
   node.innerHTML = output;
 };

@@ -48,8 +48,6 @@ class DemoComponent extends metal.component.Component {
         elementClose('ul');
 
       elementClose('div');
-
-      return getOutput();
     });
   }
 }
@@ -60,8 +58,7 @@ container.setAttribute('id', 'main-container');
 document.body.appendChild(container);
 
 app.get('/', (req, res) => {
-  const component = new DemoComponent({element: container});
-  component.render();
+  new DemoComponent({element: container}).render();
   const html = document.documentElement.outerHTML;
   res.send(html);
 });
