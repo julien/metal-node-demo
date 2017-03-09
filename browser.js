@@ -1,11 +1,13 @@
 
 function noop() {}
 
-const document = {
-  createElement: (tagName) => {
-    return Object.create(Element);
-  }
+function Document() {}
+
+Document.prototype.createElement = function (tagName) {
+  return Object.create(Element);
 };
+
+function DocumentFragment() {}
 
 const Element = {
   ATTRIBUTE_NODE: 2,
@@ -238,5 +240,7 @@ const Element = {
   webkitdropzone: ''
 };
 
-module.exports.document = document;
+module.exports.Document = Document;
+module.exports.DocumentFragment = DocumentFragment;
 module.exports.Element = Element;
+module.exports.document = new Document();

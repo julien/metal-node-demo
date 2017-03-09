@@ -1,7 +1,15 @@
 const express = require('express');
 const app = express();
 
-global.document = require('./browser').document;
+// const jsdom = require('jsdom');
+// global.document = jsdom.jsdom();
+// global.window = global.document.defaultView;
+
+const browser = require('./browser');
+global.Document = browser.DocumentFragment;
+global.DocumentFragment = browser.DocumentFragment;
+global.Element = function Element() {};
+global.document = browser.document;
 global.document.body = document.createElement();
 global.window = {};
 
@@ -9,7 +17,8 @@ const metal = {
   core: require('metal').core,
   component: require('metal-component'),
   dom: require('metal-dom'),
-  incrementalDom: require('metal-incremental-dom')
+  incrementalDom: require('metal-incremental-dom'),
+  jsx: require('metal-jsx')
 };
 
 const incrementalDomString = require('./vendor/virtual_elements');
@@ -19,6 +28,10 @@ const elementVoid = incrementalDomString.elementVoid;
 const text = incrementalDomString.text;
 const patch = incrementalDomString.patch;
 const getOutput = incrementalDomString.getOutput;
+global.IncrementalDOM = incrementalDomString;
+
+const createJSXComponent = require('./lib/demo-jsx-component').createJSXComponent;
+
 
 class DemoComponent extends metal.component.Component {
   render() {
@@ -43,19 +56,29 @@ class DemoComponent extends metal.component.Component {
 }
 DemoComponent.RENDERER = metal.incrementalDom.IncrementalDomRenderer;
 
-
 app.get('/', (req, res) => {
   new DemoComponent({}).render();
-  const html =
-`
-<!doctype html>
-<html>
-  <head></head>
-  <body>
-    ${getOutput()}
-  </body>
-</html>
-`;
+  const html = `<!doctype html>
+    <html>
+      <head></head>
+      <body>
+        ${getOutput()}
+      </body>
+    </html>`;
+  res.send(html);
+});
+
+
+app.get('/jsx', (req, res) => {
+
+  createJSXComponent();
+
+  const html = `<!doctype html>
+    <html>
+      <head></head>
+      <body>${getOutput()}</body>
+    <html>`;
+
   res.send(html);
 });
 
