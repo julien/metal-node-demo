@@ -1,6 +1,6 @@
 import {JSXComponent} from 'metal-jsx';
 
-class DemoJSXComponent extends JSXComponent {
+export default class DemoJSXComponent extends JSXComponent {
   render() {
     return <h1>{this.props.message}</h1>;
   }

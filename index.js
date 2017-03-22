@@ -1,17 +1,17 @@
 const express = require('express');
 const app = express();
 
-// const jsdom = require('jsdom');
-// global.document = jsdom.jsdom();
-// global.window = global.document.defaultView;
+const jsdom = require('jsdom');
+global.document = jsdom.jsdom();
+global.window = global.document.defaultView;
 
-const browser = require('./browser');
-global.Document = browser.DocumentFragment;
-global.DocumentFragment = browser.DocumentFragment;
-global.Element = function Element() {};
-global.document = browser.document;
-global.document.body = document.createElement();
-global.window = {};
+// const browser = require('./browser');
+// global.Document = browser.DocumentFragment;
+// global.DocumentFragment = browser.DocumentFragment;
+// global.Element = function Element() {};
+// global.document = browser.document;
+// global.document.body = document.createElement();
+// global.window = {};
 
 const metal = {
   core: require('metal').core,
@@ -30,8 +30,7 @@ const patch = incrementalDomString.patch;
 const getOutput = incrementalDomString.getOutput;
 global.IncrementalDOM = incrementalDomString;
 
-const createJSXComponent = require('./lib/demo-jsx-component').createJSXComponent;
-
+const createJSXComponent = require('./lib/src/demo').createJSXComponent;
 
 class DemoComponent extends metal.component.Component {
   render() {
@@ -56,6 +55,10 @@ class DemoComponent extends metal.component.Component {
 }
 DemoComponent.RENDERER = metal.incrementalDom.IncrementalDomRenderer;
 
+// This will break since HTMLElement is not
+// defined on the "server" (even if jsdom is used)
+// metal.core.defineWebComponent('metal-demo', DemoComponent);
+
 app.get('/', (req, res) => {
   new DemoComponent({}).render();
   const html = `<!doctype html>
@@ -68,7 +71,6 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-
 app.get('/jsx', (req, res) => {
 
   createJSXComponent();
@@ -76,7 +78,13 @@ app.get('/jsx', (req, res) => {
   const html = `<!doctype html>
     <html>
       <head></head>
-      <body>${getOutput()}</body>
+      <body></body>
+
+      <script>
+        window.onload = function () {
+          ${getOutput()}
+        };
+      </script>
     <html>`;
 
   res.send(html);
