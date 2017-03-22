@@ -1,17 +1,18 @@
 const express = require('express');
 const app = express();
 
-const jsdom = require('jsdom');
-global.document = jsdom.jsdom();
-global.window = global.document.defaultView;
+// const jsdom = require('jsdom');
+// global.document = jsdom.jsdom();
+// global.window = global.document.defaultView;
 
-// const browser = require('./browser');
-// global.Document = browser.DocumentFragment;
-// global.DocumentFragment = browser.DocumentFragment;
-// global.Element = function Element() {};
-// global.document = browser.document;
-// global.document.body = document.createElement();
-// global.window = {};
+const browser = require('./browser');
+global.Document = browser.DocumentFragment;
+global.DocumentFragment = browser.DocumentFragment;
+global.Element = function Element() {};
+global.HTMLElement = function HTMLElement() {};
+global.document = browser.document;
+global.document.body = document.createElement();
+global.window = {};
 
 const metal = {
   core: require('metal').core,
@@ -55,9 +56,11 @@ class DemoComponent extends metal.component.Component {
 }
 DemoComponent.RENDERER = metal.incrementalDom.IncrementalDomRenderer;
 
-// This will break since HTMLElement is not
-// defined on the "server" (even if jsdom is used)
 // metal.core.defineWebComponent('metal-demo', DemoComponent);
+// This will break since window.customElements is not
+// defined on the "server" (even if jsdom is used)
+// we could "shim" the CustomElements API.
+// https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
 
 app.get('/', (req, res) => {
   new DemoComponent({}).render();
@@ -72,7 +75,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/jsx', (req, res) => {
-
   createJSXComponent();
 
   const html = `<!doctype html>

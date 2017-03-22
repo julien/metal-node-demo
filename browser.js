@@ -244,3 +244,4 @@ module.exports.Document = Document;
 module.exports.DocumentFragment = DocumentFragment;
 module.exports.Element = Element;
 module.exports.document = new Document();
+
