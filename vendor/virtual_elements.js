@@ -163,6 +163,12 @@ var patch = function patch(node, description, data) {
   node.innerHTML = output;
 };
 
+var patchOuter = function patchOuter(node, description, data) {
+  description(data);
+  var output = getOutput();
+  node.innerHTML = output;
+};
+
 /**
  * Declares a virtual Text at this point in the document.
  *
@@ -213,4 +219,5 @@ exports.elementClose = elementClose;
 exports.text = text;
 exports.attr = attr;
 exports.patch = patch;
+exports.patchOuter = patchOuter;
 exports.getOutput = getOutput;

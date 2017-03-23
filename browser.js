@@ -240,8 +240,29 @@ const Element = {
   webkitdropzone: ''
 };
 
-module.exports.Document = Document;
-module.exports.DocumentFragment = DocumentFragment;
-module.exports.Element = Element;
-module.exports.document = new Document();
+function HTMLElement() {}
+
+function NodeList() {}
+NodeList.prototype = {
+  constructor: NodeList,
+  appendChild: noop
+};
+
+global.Document = Document;
+global.DocumentFragment = DocumentFragment;
+global.Element = function Element() {};
+global.HTMLElement = HTMLElement;
+global.NodeList = NodeList;
+
+global.document = new Document();
+global.document.body = document.createElement();
+
+global.window = {};
+
+module.exports = {
+  Document: Document,
+  DocumentFragment: DocumentFragment,
+  Element: Element,
+  document: new Document()
+};
 

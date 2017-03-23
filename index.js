@@ -1,18 +1,9 @@
 const express = require('express');
 const app = express();
 
-// const jsdom = require('jsdom');
-// global.document = jsdom.jsdom();
-// global.window = global.document.defaultView;
-
-const browser = require('./browser');
-global.Document = browser.DocumentFragment;
-global.DocumentFragment = browser.DocumentFragment;
-global.Element = function Element() {};
-global.HTMLElement = function HTMLElement() {};
-global.document = browser.document;
-global.document.body = document.createElement();
-global.window = {};
+const jsdom = require('jsdom');
+global.document = jsdom.jsdom();
+global.window = global.document.defaultView;
 
 const metal = {
   core: require('metal').core,
@@ -21,76 +12,77 @@ const metal = {
   incrementalDom: require('metal-incremental-dom'),
   jsx: require('metal-jsx')
 };
-
 const incrementalDomString = require('./vendor/virtual_elements');
-const elementOpen = incrementalDomString.elementOpen;
-const elementClose = incrementalDomString.elementClose;
-const elementVoid = incrementalDomString.elementVoid;
-const text = incrementalDomString.text;
-const patch = incrementalDomString.patch;
 const getOutput = incrementalDomString.getOutput;
-global.IncrementalDOM = incrementalDomString;
 
-const createJSXComponent = require('./lib/src/demo').createJSXComponent;
+// Components
+const DemoIncrementalDOMComponent = require('./DemoIncrementalDOMComponent');
+const DemoJSXComponent = require('./lib/src/DemoJSXComponent').default;
 
-class DemoComponent extends metal.component.Component {
-  render() {
-    patch(this.element, function () {
-      elementOpen('div', null, ['id', 'div-component']);
-
-        elementOpen('button', null, ['id', 'button-1']);
-          text('A button');
-        elementClose('button');
-
-        elementOpen('ul');
-        for (let i = 0; i < 10; i++) {
-          elementOpen('li');
-            text(`List item ${i+1}`);
-          elementClose('li');
-        }
-        elementClose('ul');
-
-      elementClose('div');
-    });
-  }
-}
-DemoComponent.RENDERER = metal.incrementalDom.IncrementalDomRenderer;
-
-// metal.core.defineWebComponent('metal-demo', DemoComponent);
-// This will break since window.customElements is not
-// defined on the "server" (even if jsdom is used)
-// we could "shim" the CustomElements API.
-// https://html.spec.whatwg.org/multipage/scripting.html#custom-elements-api
+// routes
+// ------
+// add a static route for our public assets
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  new DemoComponent({}).render();
+
+  new DemoIncrementalDOMComponent({element: document.body});
+
   const html = `<!doctype html>
     <html>
-      <head></head>
+      <head>
+        <title>Metal Node Demo</title>
+        <script src="demo.js"></script>
+      </head>
       <body>
         ${getOutput()}
+
+        <hr>
+        <span>A &quot;Soy&quot; component</span>
+        <div id="demo-soy"></div>
+
+        <hr>
+        <span>A &quot;JSX&quot; component</span>
+        <div id="demo-jsx"></div>
+
+        <script>
+          window.addEventListener('load', () => {
+
+            new metal.DemoSoyComponent({
+              message: 'Demo Soy Component'
+              }, document.querySelector('#demo-soy'));
+
+            metal.JSXComponent.render(
+              new metal.DemoJSXComponent({message: 'Demo JSX Component'},
+              document.querySelector('#demo-jsx'))
+            );
+
+          });
+        </script>
       </body>
     </html>`;
+
   res.send(html);
 });
 
+
 app.get('/jsx', (req, res) => {
-  createJSXComponent();
+
+  new DemoJSXComponent({message: 'Hola JSX', element: document.body});
 
   const html = `<!doctype html>
-    <html>
-      <head></head>
-      <body></body>
-
-      <script>
-        window.onload = function () {
-          ${getOutput()}
-        };
-      </script>
-    <html>`;
+  <html>
+    <head>
+      <title>Demo JSX Component</title>
+    </head>
+    <body>
+      ${getOutput()}
+    </body>
+  </html>`;
 
   res.send(html);
 });
 
 const port = process.env.PORT ? process.env.PORT : 80;
 app.listen(port, () => console.log(`listening on port ${port}`));
+
