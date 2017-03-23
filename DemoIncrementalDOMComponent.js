@@ -38,10 +38,6 @@ class DemoIncrementalDOMComponent extends metal.component.Component {
 
         elementClose('ul');
 
-        elementOpen('span');
-          text('Components are also rendered on the client');
-        elementClose('span');
-
       elementClose('div');
     });
   }

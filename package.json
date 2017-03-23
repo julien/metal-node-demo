@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm run compile & npm run build",
+    "postinstall": "npm run compile",
     "start": "node index.js",
     "build": "gulp build",
     "compile": "babel --presets es2015,metal-jsx -d lib/ src/DemoJSXComponent.js",

@@ -32,33 +32,10 @@ app.get('/', (req, res) => {
     <html>
       <head>
         <title>Metal Node Demo</title>
-        <script src="demo.js"></script>
       </head>
       <body>
         ${getOutput()}
 
-        <hr>
-        <span>A &quot;Soy&quot; component</span>
-        <div id="demo-soy"></div>
-
-        <hr>
-        <span>A &quot;JSX&quot; component</span>
-        <div id="demo-jsx"></div>
-
-        <script>
-          window.addEventListener('load', () => {
-
-            new metal.DemoSoyComponent({
-              message: 'Demo Soy Component'
-              }, document.querySelector('#demo-soy'));
-
-            metal.JSXComponent.render(
-              new metal.DemoJSXComponent({message: 'Demo JSX Component'},
-              document.querySelector('#demo-jsx'))
-            );
-
-          });
-        </script>
       </body>
     </html>`;
 
