@@ -7,7 +7,7 @@
     "postinstall": "npm run compile",
     "start": "node index.js",
     "build": "gulp build",
-    "compile": "babel --presets es2015,metal-jsx -d lib/ src/DemoJSXComponent.js",
+    "compile": "babel --presets es2015,metal-jsx -d lib/ src/*.js",
     "debug": "node --inspect --debug-brk index.js"
   },
   "keywords": [],

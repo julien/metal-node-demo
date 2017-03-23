@@ -36,6 +36,13 @@ class DemoIncrementalDOMComponent extends metal.component.Component {
             elementClose('a');
           elementClose('li');
 
+
+          elementOpen('li');
+            elementOpen('a', null, ['href', '/soy']);
+              text('Soy component demo');
+            elementClose('a');
+          elementClose('li');
+
         elementClose('ul');
 
       elementClose('div');

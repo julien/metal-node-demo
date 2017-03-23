@@ -18,6 +18,7 @@ const getOutput = incrementalDomString.getOutput;
 // Components
 const DemoIncrementalDOMComponent = require('./DemoIncrementalDOMComponent');
 const DemoJSXComponent = require('./lib/src/DemoJSXComponent').default;
+const DemoSoyComponent = require('./lib/src/DemoSoyComponent').default;
 
 // routes
 // ------
@@ -51,6 +52,23 @@ app.get('/jsx', (req, res) => {
   <html>
     <head>
       <title>Demo JSX Component</title>
+    </head>
+    <body>
+      ${getOutput()}
+    </body>
+  </html>`;
+
+  res.send(html);
+});
+
+app.get('/soy', (req, res) => {
+
+  new DemoSoyComponent({message: 'Hola Soy', element: document.body});
+
+  const html = `<!doctype html>
+  <html>
+    <head>
+      <title>Demo Soy Component</title>
     </head>
     <body>
       ${getOutput()}
