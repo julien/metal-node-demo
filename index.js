@@ -1,3 +1,4 @@
+const process = require('process');
 const express = require('express');
 const app = express();
 
@@ -26,7 +27,6 @@ const DemoSoyComponent = require('./lib/src/DemoSoyComponent').default;
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-
   new DemoIncrementalDOMComponent({element: document.body});
 
   const html = `<!doctype html>
@@ -36,7 +36,6 @@ app.get('/', (req, res) => {
       </head>
       <body>
         ${getOutput()}
-
       </body>
     </html>`;
 
@@ -45,7 +44,6 @@ app.get('/', (req, res) => {
 
 
 app.get('/jsx', (req, res) => {
-
   new DemoJSXComponent({message: 'Hola JSX', element: document.body});
 
   const html = `<!doctype html>
@@ -62,7 +60,6 @@ app.get('/jsx', (req, res) => {
 });
 
 app.get('/soy', (req, res) => {
-
   new DemoSoyComponent({message: 'Hola Soy', element: document.body});
 
   const html = `<!doctype html>

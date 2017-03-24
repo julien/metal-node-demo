@@ -4,13 +4,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var elementDummy_ = {
+var noop = function noop() {};
+
+var outputTarget_ = {
   addEventListener: function addEventListener() {}
 };
 
 var buffer_ = [];
 var output_ = {};
 var nestingCount_ = 1;
+var keepOpen_ = false;
+var prettyPrint_ = '';
+var doneCallback_ = void 0;
 
 var push_ = function push_(token) {
   var close = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -24,7 +29,13 @@ var push_ = function push_(token) {
 };
 
 var getOutput = function getOutput() {
-  return output_.html;
+  var flush = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+  if (flush) {
+    output_.html = '';
+  }
+  var tmp = output_.html.slice();
+  return tmp;
 };
 
 var attrsArray_ = function attrsArray_(data) {
@@ -58,7 +69,7 @@ var elementClose = function elementClose(nameOrCtor) {
   }
   push_('</' + nameOrCtor + '>', close);
 
-  return elementDummy_;
+  return outputTarget_;
 };
 
 /**
@@ -111,7 +122,7 @@ var elementOpenEnd = function elementOpenEnd() {
   push_('>');
   nestingCount_++;
 
-  return elementDummy_;
+  return outputTarget_;
 };
 
 /**
@@ -137,37 +148,28 @@ var elementOpenStart = function elementOpenStart(nameOrCtor, key, statics) {
   }
 };
 
-var noop = function noop() {};
-
 var patch = function patch(node, description, data) {
+
   var fn = typeof description === 'function' ? description : noop;
-
-  // if (!node.tagName) {
-  //   return;
-  // }
-
-  // const tag = node.tagName.toLowerCase();
-  // const attrs = [];
-  // if (node.attributes) {
-  //   for (let i = 0, l = node.attributes.length; i < l; i++) {
-  //     attrs.push(node.attributes[i].name);
-  //     attrs.push(node.attributes[i].value);
-  //   }
-  // }
-
-  // elementOpen(tag, null, attrs);
-  description(data);
-  // elementClose(tag);
+  if (typeof node === 'function') {
+    node(function () {
+      return fn(data);
+    });
+  } else {
+    fn(data);
+  }
 
   var output = getOutput();
-  node.innerHTML = output;
+  if (Object.prototype.hasOwnProperty.call(node, 'innerHTML')) {
+    node.innerHTML = output;
+  }
+  if (doneCallback_) {
+    doneCallback_(output_);
+  }
 };
 
-var patchOuter = function patchOuter(node, description, data) {
-  description(data);
-  var output = getOutput();
-  node.innerHTML = output;
-};
+var patchOuter = patch;
+var patchInner = patch;
 
 /**
  * Declares a virtual Text at this point in the document.
@@ -211,6 +213,21 @@ var text = function text(value, var_args) {
   push_('' + formatted);
 };
 
+var setOutput = function setOutput(prettyPrint, output, doneCallback, keepOpen) {
+  prettyPrint_ = prettyPrint;
+  output_ = output ? output : {};
+  doneCallback_ = typeof callback === 'function' ? callback : undefined;
+  keepOpen_ = keepOpen;
+};
+
+var setOutputTarget = function setOutputTarget(obj, merge) {
+  if (merge) {
+    Object.assign(outputTarget_, obj);
+  } else {
+    outputTarget_ = obj;
+  }
+};
+
 exports.elementOpenStart = elementOpenStart;
 exports.elementOpenEnd = elementOpenEnd;
 exports.elementOpen = elementOpen;
@@ -219,5 +236,8 @@ exports.elementClose = elementClose;
 exports.text = text;
 exports.attr = attr;
 exports.patch = patch;
+exports.patchInner = patchInner;
 exports.patchOuter = patchOuter;
 exports.getOutput = getOutput;
+exports.setOutput = setOutput;
+exports.setOutputTarget = setOutputTarget;
