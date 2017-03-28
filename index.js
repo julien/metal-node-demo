@@ -1,4 +1,3 @@
-const process = require('process');
 const express = require('express');
 const app = express();
 
@@ -6,73 +5,36 @@ const jsdom = require('jsdom');
 global.document = jsdom.jsdom();
 global.window = global.document.defaultView;
 
-const metal = {
-  core: require('metal').core,
-  component: require('metal-component'),
-  dom: require('metal-dom'),
-  incrementalDom: require('metal-incremental-dom'),
-  jsx: require('metal-jsx')
-};
 const incrementalDomString = require('./vendor/virtual_elements');
 const getOutput = incrementalDomString.getOutput;
 
-// Components
-const DemoIncrementalDOMComponent = require('./DemoIncrementalDOMComponent');
+const DemoIncrementalDOMComponent = require('./src/DemoIncrementalDOMComponent');
 const DemoJSXComponent = require('./lib/src/DemoJSXComponent').default;
 const DemoSoyComponent = require('./lib/src/DemoSoyComponent').default;
 
-// routes
-// ------
-// add a static route for our public assets
-app.use(express.static('public'));
+const printHtml = (title = 'Demo') => `<!doctype html>
+<html>
+  <head>
+    <title>${title}</title>
+  </head>
+  <body>
+    ${getOutput()}
+  </body>
+</html>`;
 
 app.get('/', (req, res) => {
-  new DemoIncrementalDOMComponent({element: document.body});
-
-  const html = `<!doctype html>
-    <html>
-      <head>
-        <title>Metal Node Demo</title>
-      </head>
-      <body>
-        ${getOutput()}
-      </body>
-    </html>`;
-
-  res.send(html);
+  new DemoIncrementalDOMComponent();
+  res.send(printHtml('Metal Node Demo'));
 });
 
-
 app.get('/jsx', (req, res) => {
-  new DemoJSXComponent({message: 'Hola JSX', element: document.body});
-
-  const html = `<!doctype html>
-  <html>
-    <head>
-      <title>Demo JSX Component</title>
-    </head>
-    <body>
-      ${getOutput()}
-    </body>
-  </html>`;
-
-  res.send(html);
+  new DemoJSXComponent({message: 'An example JSX Component'});
+  res.send(printHtml('Demo JSX Component'));
 });
 
 app.get('/soy', (req, res) => {
-  new DemoSoyComponent({message: 'Hola Soy', element: document.body});
-
-  const html = `<!doctype html>
-  <html>
-    <head>
-      <title>Demo Soy Component</title>
-    </head>
-    <body>
-      ${getOutput()}
-    </body>
-  </html>`;
-
-  res.send(html);
+  new DemoSoyComponent({message: 'An example Soy Component'});
+  res.send(printHtml('Demo Soy Component'));
 });
 
 const port = process.env.PORT ? process.env.PORT : 80;
