@@ -9,8 +9,6 @@
     "build": "babel --presets es2015,metal-jsx -d lib/ src/*.js",
     "debug": "node --inspect --debug-brk index.js"
   },
-  "keywords": [],
-  "author": "",
   "private": true,
   "license": "ISC",
   "dependencies": {
