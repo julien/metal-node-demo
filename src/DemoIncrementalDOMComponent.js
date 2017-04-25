@@ -3,7 +3,7 @@ const metal = {
   incrementalDom: require('metal-incremental-dom')
 };
 
-const incrementalDomString = require('../vendor/virtual_elements');
+const incrementalDomString = require('../vendor/virtual_elements_latest');
 const elementOpen = incrementalDomString.elementOpen;
 const elementClose = incrementalDomString.elementClose;
 const text = incrementalDomString.text;

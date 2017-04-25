@@ -5,7 +5,7 @@ const jsdom = require('jsdom');
 global.document = jsdom.jsdom();
 global.window = global.document.defaultView;
 
-const incrementalDomString = require('./vendor/virtual_elements');
+const incrementalDomString = require('./vendor/virtual_elements_latest');
 const getOutput = incrementalDomString.getOutput;
 
 const DemoIncrementalDOMComponent = require('./src/DemoIncrementalDOMComponent');
