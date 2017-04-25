@@ -59,7 +59,7 @@ var push_ = function push_(token) {
  */
 var getOutput = function getOutput() {
   var flush = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-console.log(output_)
+console.log(output_);
   output_ = flush ? '' : output_;
   return output_;
 };
@@ -219,33 +219,9 @@ var patchInner = patch;
  */
 var text = function text(value, var_args) {
   var formatted = value;
-  if (Array.isArray(var_args)) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      for (var _iterator = var_args[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var v = _step.value;
-
-        if (typeof v === 'function') {
-          formatted = v(formatted);
-        }
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
+  for (var i = 1; i < arguments.length; i += 1) {
+    var fn = arguments[i];
+    formatted = fn(formatted);
   }
   push_('' + formatted);
 };
