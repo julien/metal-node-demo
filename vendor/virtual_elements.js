@@ -114,7 +114,7 @@ var elementVoid = function elementVoid(nameOrCtor, key, statics, var_args) {
 var elementOpen = function elementOpen(nameOrCtor, key, statics, var_args) {
   if (typeof nameOrCtor === 'function') {
     new nameOrCtor();
-    return;
+    return currentParent;
   }
 
   buffer.push('<' + nameOrCtor);
@@ -137,6 +137,8 @@ var elementOpen = function elementOpen(nameOrCtor, key, statics, var_args) {
   }
 
   buffer.push('>');
+
+  return currentParent;
 };
 
 /**
