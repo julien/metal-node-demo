@@ -8,26 +8,20 @@ global.window = global.document.defaultView;
 const Component = require('metal-component').default;
 const IncrementalDomRenderer = require('metal-incremental-dom').default;
 
-// This must be after metal component dependencies, to overwride original
-// incremental dom imported inside the dependency files.
-global.IncrementalDOM = require('./vendor/virtual_elements');
-
 const AJSX = require('./dist/src/jsx/A').default;
 const ASoy = require('./dist/src/soy/A').default;
 const AIDom = require('./dist/src/idom/A').default;
 
-Component.renderToStringStack = [];
-
-let originalPatch = IncrementalDOM.patch;
-IncrementalDOM.patch = function() {
-  let currentElement = originalPatch.apply(null, arguments);
-  Component.renderToStringStack.push(currentElement.innerHTML);
-};
-
 Component.renderToString = function(ctor, data) {
-  Component.renderToStringStack = [];
+  let stack = [];
+  let patch = IncrementalDOM.patch;
+  IncrementalDOM.patch = function() {
+    let currentElement = patch.apply(null, arguments);
+    stack.push(currentElement.innerHTML);
+    IncrementalDOM.patch = patch;
+  };
   Component.render(ctor, data);
-  return Component.renderToStringStack[0];
+  return stack[0];
 };
 
 app.get('/', (req, res) => {
