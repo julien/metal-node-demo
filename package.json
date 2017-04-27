@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "npm run build",
     "start": "node index.js",
-    "build": "babel --presets es2015,metal-jsx -d lib/ src/*.js",
+    "build": "metal soy -s src/soy/*.soy -d src/soy && babel --presets es2015,metal-jsx -d dist/ src/**/*.js",
     "debug": "node --inspect --debug-brk index.js"
   },
   "author": "",
@@ -24,6 +24,7 @@
     "metal-component": "^2.7.0",
     "metal-incremental-dom": "^2.7.0",
     "metal-jsx": "^2.7.0",
+    "metal-cli": "latest",
     "metal-soy": "^2.7.0"
   }
 }

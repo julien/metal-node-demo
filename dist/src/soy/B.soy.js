@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.templates = exports.DemoSoyComponent = undefined;
+exports.templates = exports.B = undefined;
 
 var _metalComponent = require('metal-component');
 
@@ -25,26 +25,27 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var templates;
 goog.loadModule(function (exports) {
 
-  // This file was automatically generated from DemoSoyComponent.soy.
+  // This file was automatically generated from B.soy.
   // Please don't edit this file by hand.
 
   /**
-   * @fileoverview Templates in namespace DemoSoyComponent.
+   * @fileoverview Templates in namespace B.
+   * @suppress {missingRequire}
    * @public
    */
 
-  goog.module('DemoSoyComponent.incrementaldom');
+  goog.module('B.incrementaldom');
 
+  /** @suppress {extraRequire} */
+  goog.require('goog.asserts');
+  /** @suppress {extraRequire} */
+  goog.require('goog.i18n.bidi');
+  /** @suppress {extraRequire} */
+  goog.require('goog.string');
   /** @suppress {extraRequire} */
   var soy = goog.require('soy');
   /** @suppress {extraRequire} */
   var soydata = goog.require('soydata');
-  /** @suppress {extraRequire} */
-  goog.require('goog.i18n.bidi');
-  /** @suppress {extraRequire} */
-  goog.require('goog.asserts');
-  /** @suppress {extraRequire} */
-  goog.require('goog.string');
   var IncrementalDom = goog.require('incrementaldom');
   var ie_open = IncrementalDom.elementOpen;
   var ie_close = IncrementalDom.elementClose;
@@ -53,6 +54,11 @@ goog.loadModule(function (exports) {
   var ie_open_end = IncrementalDom.elementOpenEnd;
   var itext = IncrementalDom.text;
   var iattr = IncrementalDom.attr;
+  var soyIdom = goog.require('soy.idom');
+  var dyn = soyIdom.renderDynamicContent;
+  var print = soyIdom.print;
+
+  var $templateAlias1 = _metalSoy2.default.getTemplate('C.incrementaldom', 'render');
 
   /**
    * @param {Object<string, *>=} opt_data
@@ -62,37 +68,36 @@ goog.loadModule(function (exports) {
    * @suppress {checkTypes}
    */
   function $render(opt_data, opt_ignored, opt_ijData) {
-    opt_data = opt_data || {};
-    ie_open('h3');
-    var dyn0 = opt_data.message;
-    if (typeof dyn0 == 'function') dyn0();else if (dyn0 != null) itext(dyn0);
-    ie_close('h3');
+    ie_open('div');
+    itext('B');
+    $templateAlias1(null, null, opt_ijData);
+    ie_close('div');
   }
   exports.render = $render;
   if (goog.DEBUG) {
-    $render.soyTemplateName = 'DemoSoyComponent.render';
+    $render.soyTemplateName = 'B.render';
   }
 
-  exports.render.params = ["message"];
-  exports.render.types = { "message": "any" };
+  exports.render.params = [];
+  exports.render.types = {};
   exports.templates = templates = exports;
   return exports;
 });
 
-var DemoSoyComponent = function (_Component) {
-  _inherits(DemoSoyComponent, _Component);
+var B = function (_Component) {
+  _inherits(B, _Component);
 
-  function DemoSoyComponent() {
-    _classCallCheck(this, DemoSoyComponent);
+  function B() {
+    _classCallCheck(this, B);
 
-    return _possibleConstructorReturn(this, (DemoSoyComponent.__proto__ || Object.getPrototypeOf(DemoSoyComponent)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).apply(this, arguments));
   }
 
-  return DemoSoyComponent;
+  return B;
 }(_metalComponent2.default);
 
-_metalSoy2.default.register(DemoSoyComponent, templates);
-exports.DemoSoyComponent = DemoSoyComponent;
+_metalSoy2.default.register(B, templates);
+exports.B = B;
 exports.templates = templates;
 exports.default = templates;
 /* jshint ignore:end */

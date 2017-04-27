@@ -4,26 +4,27 @@ import Soy from 'metal-soy';
 var templates;
 goog.loadModule(function(exports) {
 
-// This file was automatically generated from DemoSoyComponent.soy.
+// This file was automatically generated from C.soy.
 // Please don't edit this file by hand.
 
 /**
- * @fileoverview Templates in namespace DemoSoyComponent.
+ * @fileoverview Templates in namespace C.
+ * @suppress {missingRequire}
  * @public
  */
 
-goog.module('DemoSoyComponent.incrementaldom');
+goog.module('C.incrementaldom');
 
+/** @suppress {extraRequire} */
+goog.require('goog.asserts');
+/** @suppress {extraRequire} */
+goog.require('goog.i18n.bidi');
+/** @suppress {extraRequire} */
+goog.require('goog.string');
 /** @suppress {extraRequire} */
 var soy = goog.require('soy');
 /** @suppress {extraRequire} */
 var soydata = goog.require('soydata');
-/** @suppress {extraRequire} */
-goog.require('goog.i18n.bidi');
-/** @suppress {extraRequire} */
-goog.require('goog.asserts');
-/** @suppress {extraRequire} */
-goog.require('goog.string');
 var IncrementalDom = goog.require('incrementaldom');
 var ie_open = IncrementalDom.elementOpen;
 var ie_close = IncrementalDom.elementClose;
@@ -32,6 +33,9 @@ var ie_open_start = IncrementalDom.elementOpenStart;
 var ie_open_end = IncrementalDom.elementOpenEnd;
 var itext = IncrementalDom.text;
 var iattr = IncrementalDom.attr;
+var soyIdom = goog.require('soy.idom');
+var dyn = soyIdom.renderDynamicContent;
+var print = soyIdom.print;
 
 
 /**
@@ -42,26 +46,24 @@ var iattr = IncrementalDom.attr;
  * @suppress {checkTypes}
  */
 function $render(opt_data, opt_ignored, opt_ijData) {
-  opt_data = opt_data || {};
-  ie_open('h3');
-    var dyn0 = opt_data.message;
-    if (typeof dyn0 == 'function') dyn0(); else if (dyn0 != null) itext(dyn0);
-  ie_close('h3');
+  ie_open('div');
+    itext('C');
+  ie_close('div');
 }
 exports.render = $render;
 if (goog.DEBUG) {
-  $render.soyTemplateName = 'DemoSoyComponent.render';
+  $render.soyTemplateName = 'C.render';
 }
 
-exports.render.params = ["message"];
-exports.render.types = {"message":"any"};
+exports.render.params = [];
+exports.render.types = {};
 templates = exports;
 return exports;
 
 });
 
-class DemoSoyComponent extends Component {}
-Soy.register(DemoSoyComponent, templates);
-export { DemoSoyComponent, templates };
+class C extends Component {}
+Soy.register(C, templates);
+export { C, templates };
 export default templates;
 /* jshint ignore:end */

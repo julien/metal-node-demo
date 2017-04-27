@@ -14,25 +14,69 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DemoJSXComponent = function (_JSXComponent) {
-  _inherits(DemoJSXComponent, _JSXComponent);
+var C = function (_JSXComponent) {
+  _inherits(C, _JSXComponent);
 
-  function DemoJSXComponent() {
-    _classCallCheck(this, DemoJSXComponent);
+  function C() {
+    _classCallCheck(this, C);
 
-    return _possibleConstructorReturn(this, (DemoJSXComponent.__proto__ || Object.getPrototypeOf(DemoJSXComponent)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (C.__proto__ || Object.getPrototypeOf(C)).apply(this, arguments));
   }
 
-  _createClass(DemoJSXComponent, [{
+  _createClass(C, [{
     key: 'render',
     value: function render() {
-      IncrementalDOM.elementOpen('h3');
-      iDOMHelpers.renderArbitrary(this.props.message);
-      return IncrementalDOM.elementClose('h3');
+      IncrementalDOM.elementOpen('div');
+      IncrementalDOM.text('C');
+      return IncrementalDOM.elementClose('div');
     }
   }]);
 
-  return DemoJSXComponent;
+  return C;
 }(_metalJsx.JSXComponent);
 
-exports.default = DemoJSXComponent;
+var B = function (_JSXComponent2) {
+  _inherits(B, _JSXComponent2);
+
+  function B() {
+    _classCallCheck(this, B);
+
+    return _possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).apply(this, arguments));
+  }
+
+  _createClass(B, [{
+    key: 'render',
+    value: function render() {
+      IncrementalDOM.elementOpen('div');
+      IncrementalDOM.text('B');
+      IncrementalDOM.elementVoid(C);
+      return IncrementalDOM.elementClose('div');
+    }
+  }]);
+
+  return B;
+}(_metalJsx.JSXComponent);
+
+var A = function (_JSXComponent3) {
+  _inherits(A, _JSXComponent3);
+
+  function A() {
+    _classCallCheck(this, A);
+
+    return _possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).apply(this, arguments));
+  }
+
+  _createClass(A, [{
+    key: 'render',
+    value: function render() {
+      IncrementalDOM.elementOpen('div');
+      IncrementalDOM.text('A');
+      IncrementalDOM.elementVoid(B);
+      return IncrementalDOM.elementClose('div');
+    }
+  }]);
+
+  return A;
+}(_metalJsx.JSXComponent);
+
+exports.default = A;

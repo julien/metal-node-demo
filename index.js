@@ -5,38 +5,42 @@ const jsdom = require('jsdom');
 global.document = jsdom.jsdom();
 global.window = global.document.defaultView;
 
-const incrementalDomString = require('./vendor/virtual_elements_latest');
-const getOutput = incrementalDomString.getOutput;
+const Component = require('metal-component').default;
+const IncrementalDomRenderer = require('metal-incremental-dom').default;
 
-const DemoIncrementalDOMComponent = require('./src/DemoIncrementalDOMComponent');
-const DemoJSXComponent = require('./lib/src/DemoJSXComponent').default;
-const DemoSoyComponent = require('./lib/src/DemoSoyComponent').default;
+// This must be after metal component dependencies, to overwride original
+// incremental dom imported inside the dependency files.
+global.IncrementalDOM = require('./vendor/virtual_elements');
 
-const printHtml = (title = 'Demo') => `<!doctype html>
-<html>
-  <head>
-    <title>${title}</title>
-  </head>
-  <body>
-    ${getOutput()}
-  </body>
-</html>`;
+const AJSX = require('./dist/src/jsx/A').default;
+const ASoy = require('./dist/src/soy/A').default;
+const AIDom = require('./dist/src/idom/A').default;
+
+Component.renderToStringStack = [];
+
+let originalPatch = IncrementalDOM.patch;
+IncrementalDOM.patch = function() {
+  let currentElement = originalPatch.apply(null, arguments);
+  Component.renderToStringStack.push(currentElement.innerHTML);
+};
+
+Component.renderToString = function(ctor, data) {
+  Component.renderToStringStack = [];
+  Component.render(ctor, data);
+  return Component.renderToStringStack[0];
+};
 
 app.get('/', (req, res) => {
-  new DemoIncrementalDOMComponent();
-  res.send(printHtml('Metal Node Demo'));
+  res.send(Component.renderToString(AIDom));
 });
 
 app.get('/jsx', (req, res) => {
-  new DemoJSXComponent({message: 'An example JSX Component'});
-  res.send(printHtml('Demo JSX Component'));
+  res.send(Component.renderToString(AJSX));
 });
 
 app.get('/soy', (req, res) => {
-  new DemoSoyComponent({message: 'An example Soy Component'});
-  res.send(printHtml('Demo Soy Component'));
+  res.send(Component.renderToString(ASoy));
 });
 
-const port = process.env.PORT ? process.env.PORT : 80;
-app.listen(port, () => console.log(`listening on port ${port}`));
+app.listen(8080, () => console.log(`listening on port 8080`));
 
