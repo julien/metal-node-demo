@@ -1,9 +1,7 @@
 const express = require('express');
 const app = express();
 
-const jsdom = require('jsdom');
-global.document = jsdom.jsdom();
-global.window = global.document.defaultView;
+global.window = {};
 
 const Component = require('metal-component').default;
 const AJSX = require('./dist/src/jsx/A').default;
